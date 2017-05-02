@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Simple Distance Calculator</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        var fromloc,toloc;
+        $("#submit").click(function(){
+          fromloc=$("#frompc").val();
+          toloc=$("#topc").val();
+          $.post("http://localhost:3000/calcdist",{source: fromloc,dest: toloc}, function(data){
+            if(data==='done')
+              {
+                alert("login success");
+              }
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Hello Suretech guys !</h1>
+    From Postcode: <input type="TEXT" id="frompc" size="10">
+    To: <input type="TEXT" id="topc" size="10"><br>
+    <input type="button" id="submit" value="Calculate Distance">
+  </body>
+</html>
+
