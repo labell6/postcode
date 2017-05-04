@@ -32,22 +32,11 @@ app.post('/calcdist',function(req,res){
     function(done) {
       var err = null;
       var ll = [];
-      try {
-         coord(frompc).then(function(reslt){ll.push(reslt); done(err,ll);});
-      }
-      catch (e) {
-        console.log(e);
-      }
-      finally {return;}
+      coord(frompc).catch(function(e){console.log("Originating Postcode: "+e)}).then(function(reslt){ll.push(reslt); done(err,ll);});
     },
     function(ll,done) {
       var err = null;
-      try {
-        coord(topc).then(function(reslt){ll.push(reslt); done(err,ll);});
-      }
-      catch (e) {
-        console.log(e);
-      }
+      coord(topc).catch(function(e){console.log("Destination Postcode: "+e)}).then(function(reslt){ll.push(reslt); done(err,ll);});
     }], 
     function(err, reslt) {var val=haversine(reslt);res.status(200).send('Distance = ' + val + ' km');console.log("Distance (km) : "+val);});
 });
@@ -61,8 +50,8 @@ var server = app.listen(3000, function () {
 function coord(pcode) {
   return  new Promise((resolve, reject) => {
     postcodes.lookup(pcode, function (err, postcode) {
-       if(err) reject(err); 
-       if(!postcode) return;
+       if (err) reject (err); 
+       if (!postcode) {reject ("Postcode not found"); return;}
        var LongLat = [postcode.longitude, postcode.latitude];
        resolve (LongLat);
     });
