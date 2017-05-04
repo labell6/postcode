@@ -9,11 +9,10 @@
           fromloc=$("#frompc").val();
           toloc=$("#topc").val();
           $.post("http://localhost:3000/calcdist",{source: fromloc,dest: toloc}, function(data){
-            alert(data)
-            if(data==='done')
-              {
-                alert("login success");
-              }
+            if(data)
+            {
+                alert(data);
+            }
           });
         });
       });
