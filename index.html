@@ -9,6 +9,7 @@
           fromloc=$("#frompc").val();
           toloc=$("#topc").val();
           $.post("http://localhost:3000/calcdist",{source: fromloc,dest: toloc}, function(data){
+            alert(data)
             if(data==='done')
               {
                 alert("login success");
@@ -19,7 +20,7 @@
     </script>
   </head>
   <body>
-    <h1>Hello Suretech guys !</h1>
+    <h1>Hello Surematic guys !</h1>
     From Postcode: <input type="TEXT" id="frompc" size="10">
     To: <input type="TEXT" id="topc" size="10"><br>
     <input type="button" id="submit" value="Calculate Distance">

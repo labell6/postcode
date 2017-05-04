@@ -26,14 +26,14 @@ app.get('/',function(req,res){
 app.post('/calcdist',function(req,res){
   var frompc=req.body.source;
   var topc=req.body.dest;
-  console.log("POST request: From = "+frompc+" and To = "+topc);
+  console.log("POST request: Calc Distance From "+frompc+" To "+topc);
   async.waterfall(
   [
     function(done) {
       var err = null;
       var ll = [];
       try {
-        coord(frompc).then(function(reslt){ll.push(reslt); done(err,ll);});
+         coord(frompc).then(function(reslt){ll.push(reslt); done(err,ll);});
       }
       catch (e) {
         console.log(e);
@@ -42,10 +42,14 @@ app.post('/calcdist',function(req,res){
     },
     function(ll,done) {
       var err = null;
-      coord(topc).then(function(reslt){ll.push(reslt); done(err,ll);});
-    }], function(err, reslt) {var val=haversine(reslt);console.log("Distance (km) : "+val);});
-
-  res.end("yes");
+      try {
+        coord(topc).then(function(reslt){ll.push(reslt); done(err,ll);});
+      }
+      catch (e) {
+        console.log(e);
+      }
+    }], 
+    function(err, reslt) {var val=haversine(reslt);res.status(200).send('Distance = ' + val + ' km');console.log("Distance (km) : "+val);});
 });
 
 // start express web server
@@ -55,7 +59,7 @@ var server = app.listen(3000, function () {
 
 // determine uk longitude and latitude from postcodes.io
 function coord(pcode) {
-  return new Promise((resolve, reject) => {
+  return  new Promise((resolve, reject) => {
     postcodes.lookup(pcode, function (err, postcode) {
        if(err) reject(err); 
        if(!postcode) return;
